@@ -1,21 +1,18 @@
-
 package org.example.kursarbeit.controllers;
 
-import java.util.HashMap;
-import java.util.Map;
+import database.Database;
 
 public class AuthController {
-    private Map<String, String> users = new HashMap<>(); // Хранение пользователей в памяти
-
+    // Метод для регистрации пользователя
     public boolean register(String username, String password) {
-        if (users.containsKey(username)) {
-            return false; // Пользователь уже существует
+        if (username == null || username.isEmpty() || password == null || password.isEmpty()) {
+            return false;
         }
-        users.put(username, password); // Сохраняем пользователя
-        return true;
+        return Database.registerUser(username, password);
     }
 
-    public boolean login(String username, String password) {
-        return users.containsKey(username) && users.get(username).equals(password); // Проверка логина и пароля
+    // Метод для аутентификации пользователя
+    public boolean authenticate(String username, String password) {
+        return Database.authenticateUser(username, password);
     }
 }

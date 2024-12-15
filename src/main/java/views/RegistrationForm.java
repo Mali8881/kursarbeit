@@ -20,6 +20,7 @@ public class RegistrationForm extends Application {
         grid.setVgap(8);
         grid.setHgap(10);
 
+        // Поля ввода
         Label usernameLabel = new Label("Имя пользователя:");
         TextField usernameField = new TextField();
         Label passwordLabel = new Label("Пароль:");
@@ -32,6 +33,7 @@ public class RegistrationForm extends Application {
         grid.add(passwordField, 1, 1);
         grid.add(registerButton, 1, 2);
 
+        // Обработка нажатия кнопки
         registerButton.setOnAction(e -> {
             String username = usernameField.getText();
             String password = passwordField.getText();
@@ -49,6 +51,7 @@ public class RegistrationForm extends Application {
         primaryStage.show();
     }
 
+    // Метод для отображения сообщений
     private void showAlert(String title, String message) {
         Alert alert = new Alert(Alert.AlertType.INFORMATION);
         alert.setTitle(title);

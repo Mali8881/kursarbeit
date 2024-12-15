@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.Scene?>
+<?import javafx.stage.Stage?>
+
+<AnchorPane xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.controllers.MainController">
+    <children>
+        <MenuBar>
+            <Menu text="File">
+                <MenuItem text="Exit" onAction="#exitApp"/>
+            </Menu>
+            <Menu text="Tasks">
+                <MenuItem text="View Tasks" onAction="#openTaskView"/>
+            </Menu>
+        </MenuBar>
+        <VBox layoutX="20.0" layoutY="100.0">
+            <Label text="Welcome to your Personal Manager!" />
+            <Button text="Go to Tasks" onAction="#openTaskView"/>
+        </VBox>
+    </children>
+</AnchorPane>

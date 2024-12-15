@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.control.Button?>
+
+<VBox xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.example.kursarbeit.controllers.ProfileController">
+    <Label text="Профиль" style="-fx-font-size: 20; -fx-font-weight: bold;"/>
+    <Label text="Имя:"/>
+    <TextField fx:id="nameField" text="Введите ваше имя" />
+    <Label text="Электронная почта:"/>
+    <TextField fx:id="emailField" text="Введите ваш email" />
+    <Button text="Сохранить" onAction="#saveProfile" />
+</VBox>

@@ -1,109 +1,93 @@
 package database;
 
-import java.io.IOException;
-import java.io.InputStream;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.sql.*;
-import java.util.Properties;
 
 public class Database {
-    private static Connection connection;
+    private static final String URL = "jdbc:mysql://localhost:3306/personal_manager"; // Замените 'kursarbeit' на вашу базу данных
+    private static final String USER = "root"; // Замените на вашего пользователя MySQL
+    private static final String PASSWORD = "malika2005"; // Замените на ваш пароль MySQL
 
-    // Получение соединения
-    public static Connection getConnection() throws SQLException, ClassNotFoundException, IOException {
-        if (connection == null || connection.isClosed()) {
-            Properties properties = new Properties();
-            try (InputStream input = Database.class.getClassLoader().getResourceAsStream("sql.properties")) {
-                if (input == null) {
-                    throw new IOException("Файл sql.properties не найден.");
-                }
-                properties.load(input);
-            }
-
-            String dbUrl = properties.getProperty("database.url");
-            String dbUser = properties.getProperty("database.login");
-            String dbPassword = properties.getProperty("database.pass");
-
+    // Метод для подключения к базе данных
+    public static Connection getConnection() {
+        try {
             Class.forName("com.mysql.cj.jdbc.Driver");
-            connection = DriverManager.getConnection(dbUrl, dbUser, dbPassword);
+            return DriverManager.getConnection(URL, USER, PASSWORD);
+        } catch (ClassNotFoundException | SQLException e) {
+            e.printStackTrace();
         }
-        return connection;
+        return null;
     }
 
-    // Хэширование пароля
+    // Метод для регистрации пользователя
+    public static boolean registerUser(String username, String password) {
+        String sql = "INSERT INTO users (username, password) VALUES (?, ?)";
+        try (Connection conn = getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
+
+            // Хешируем пароль перед сохранением
+            String hashedPassword = hashPassword(password);
+
+            stmt.setString(1, username);
+            stmt.setString(2, hashedPassword);
+
+            int rowsInserted = stmt.executeUpdate();
+            return rowsInserted > 0; // Если хотя бы 1 строка добавлена, возвращаем true
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
+
+    // Метод для хеширования пароля (SHA-256)
     private static String hashPassword(String password) {
         try {
-            MessageDigest digest = MessageDigest.getInstance("SHA-256");
-            byte[] hash = digest.digest(password.getBytes());
-            StringBuilder hexString = new StringBuilder();
-            for (byte b : hash) {
-                String hex = Integer.toHexString(0xff & b);
-                if (hex.length() == 1) hexString.append('0');
-                hexString.append(hex);
+            MessageDigest md = MessageDigest.getInstance("SHA-256");
+            byte[] hashedBytes = md.digest(password.getBytes());
+            StringBuilder sb = new StringBuilder();
+            for (byte b : hashedBytes) {
+                sb.append(String.format("%02x", b));
             }
-            return hexString.toString();
+            return sb.toString();
         } catch (NoSuchAlgorithmException e) {
             throw new RuntimeException("Ошибка хеширования пароля", e);
         }
     }
 
-    // Регистрация пользователя
-    public static boolean registerUser(String username, String password) {
-        String sql = "INSERT INTO users (username, password) VALUES (?, ?)";
-        try (Connection conn = getConnection();
-             PreparedStatement pstmt = conn.prepareStatement(sql)) {
-
-            pstmt.setString(1, username);
-            pstmt.setString(2, hashPassword(password));
-            pstmt.executeUpdate();
-            return true;
-
-        } catch (SQLIntegrityConstraintViolationException e) {
-            System.err.println("Пользователь уже существует: " + username);
-        } catch (SQLException e) {
-            System.err.println("Ошибка SQL при регистрации пользователя: " + e.getMessage());
-        } catch (IOException | ClassNotFoundException e) {
-            System.err.println("Ошибка при подключении к базе данных: " + e.getMessage());
-        }
-        return false;
-    }
-
-    // Авторизация пользователя
     public static boolean authenticateUser(String username, String password) {
-        String sql = "SELECT password FROM users WHERE username = ?";
+        String sql = "SELECT * FROM users WHERE username = ? AND password = ?";
         try (Connection conn = getConnection();
-             PreparedStatement pstmt = conn.prepareStatement(sql)) {
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
 
-            pstmt.setString(1, username);
-            ResultSet rs = pstmt.executeQuery();
+            stmt.setString(1, username);
+            stmt.setString(2, hashPassword(password)); // Хешируем пароль перед проверкой
 
-            if (rs.next()) {
-                String storedPassword = rs.getString("password");
-                return hashPassword(password).equals(storedPassword);
-            }
+            ResultSet rs = stmt.executeQuery();
+            return rs.next(); // Если есть запись, то пользователь найден и пароль совпадает
+
         } catch (SQLException e) {
-            System.err.println("Ошибка SQL при авторизации: " + e.getMessage());
-        } catch (IOException | ClassNotFoundException e) {
-            System.err.println("Ошибка при подключении к базе данных: " + e.getMessage());
-        }
-        return false;
-    }
-
-    // Добавление задачи
-    public static void addTask(String date, String time, String description, String priority) {
-        String insert = "INSERT INTO tasks (date, time, description, priority) VALUES (?, ?, ?, ?)";
-        try (Connection conn = getConnection();
-             PreparedStatement stmt = conn.prepareStatement(insert)) {
-            stmt.setString(1, date);
-            stmt.setString(2, time);
-            stmt.setString(3, description);
-            stmt.setString(4, priority);
-            stmt.executeUpdate();
-        } catch (SQLException e) {
-            System.err.println("Ошибка при добавлении задачи: " + e.getMessage());
-        } catch (IOException | ClassNotFoundException e) {
-            System.err.println("Ошибка при подключении к базе данных: " + e.getMessage());
+            e.printStackTrace();
+            return false;
         }
     }
-}
+    // Метод для добавления заметки в базу данных
+    public static boolean addNoteToDatabase(int userId, String noteContent) {
+        String query = "INSERT INTO Notes (content, date_created, user_id) VALUES (?, NOW(), ?)";
+        try (Connection connection = getConnection();
+             PreparedStatement stmt = connection.prepareStatement(query)) {
+
+            stmt.setString(1, noteContent);
+            stmt.setInt(2, userId);  // Передаем userId текущего пользователя
+            int rowsInserted = stmt.executeUpdate();
+
+            return rowsInserted > 0; // Возвращаем true, если заметка была успешно добавлена
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
+
+    }
+

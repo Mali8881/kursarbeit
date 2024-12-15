@@ -1,35 +1,26 @@
 package views;
 
-import javafx.beans.property.*;
-
+import javafx.beans.property.StringProperty;
+import javafx.beans.property.SimpleStringProperty;
+import javafx.beans.property.ObjectProperty;
+import javafx.beans.property.SimpleObjectProperty;
 import java.time.LocalDate;
 
 public class Task {
-    private final IntegerProperty id;
+
     private final StringProperty title;
     private final StringProperty description;
-    private final ObjectProperty<LocalDate> deadline;
-    private final StringProperty status;
+    private final ObjectProperty<LocalDate> dueDate;
+    private final StringProperty priority;
 
-    // Конструктор с параметрами
-    public Task(int id, String title, String description, LocalDate deadline, String status) {
-        this.id = new SimpleIntegerProperty(id);
+    public Task(String title, String description, LocalDate dueDate, String priority) {
         this.title = new SimpleStringProperty(title);
         this.description = new SimpleStringProperty(description);
-        this.deadline = new SimpleObjectProperty<>(deadline);
-        this.status = new SimpleStringProperty(status);
+        this.dueDate = new SimpleObjectProperty<>(dueDate);
+        this.priority = new SimpleStringProperty(priority);
     }
 
-    // Конструктор по умолчанию
-    public Task() {
-        this(0, "Новая задача", "Описание отсутствует", LocalDate.now(), "Не начато");
-    }
-
-    // Геттеры и сеттеры для свойств
-    public IntegerProperty idProperty() {
-        return id;
-    }
-
+    // Getters for the properties
     public StringProperty titleProperty() {
         return title;
     }
@@ -38,17 +29,38 @@ public class Task {
         return description;
     }
 
-    public ObjectProperty<LocalDate> deadlineProperty() {
-        return deadline;
+    public ObjectProperty<LocalDate> dueDateProperty() {
+        return dueDate;
     }
 
-    public StringProperty statusProperty() {
-        return status;
+    public StringProperty priorityProperty() {
+        return priority;
     }
 
-    // Для удобного отображения
+    // Getters for the actual values (if needed)
+    public String getTitle() {
+        return title.get();
+    }
+
+    public String getDescription() {
+        return description.get();
+    }
+
+    public LocalDate getDueDate() {
+        return dueDate.get();
+    }
+
+    public String getPriority() {
+        return priority.get();
+    }
+
     @Override
     public String toString() {
-        return title.get() + " (" + status.get() + ")";
+        return "Task{" +
+                "title='" + title.get() + '\'' +
+                ", description='" + description.get() + '\'' +
+                ", dueDate=" + dueDate.get() +
+                ", priority='" + priority.get() + '\'' +
+                '}';
     }
 }

@@ -1,9 +1,9 @@
 module org.example.kursarbeit {
-    requires javafx.controls;  // Добавьте для использования JavaFX controls
-    requires javafx.fxml;     // Добавьте для работы с FXML
-    requires java.sql;         // Добавьте для работы с базой данных
-
-    exports views;  // Экспортируйте необходимые пакеты
-    exports database;
+    requires javafx.controls;
+    requires javafx.fxml;
+    requires java.sql;
     exports org.example.kursarbeit;
+    exports org.example.kursarbeit.controllers;  // Добавьте эту строку для экспорта контроллеров
+    opens org.example.kursarbeit.controllers to javafx.fxml;  // Разрешает доступ к контроллеру через рефлексию
+    exports views;
 }

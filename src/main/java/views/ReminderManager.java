@@ -1,58 +1,34 @@
 package views;
 
-import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.List;
-import javafx.scene.Scene;
-import javafx.scene.control.Label;
-import javafx.scene.layout.VBox;
-import javafx.stage.Stage;
+import java.time.LocalDateTime;
 
 public class ReminderManager {
-    private List<Reminder> reminders;
+    private String content;
+    private LocalDateTime dateTime;
 
-    public ReminderManager() {
-        reminders = new ArrayList<>();
+    public ReminderManager(String content, LocalDateTime dateTime) {
+        this.content = content;
+        this.dateTime = dateTime;
     }
 
-    public void addReminder(Reminder reminder) {
-        reminders.add(reminder);
+    public String getContent() {
+        return content;
     }
 
-    public List<Reminder> getReminders() {
-        return reminders;
+    public void setContent(String content) {
+        this.content = content;
     }
 
-    public void openRemindersSection(Stage parentStage) {
-        Stage reminderStage = new Stage();
-        VBox layout = new VBox(15);
-        layout.setStyle("-fx-padding: 20;");
-        layout.getChildren().add(new Label("Раздел напоминаний пока пуст"));
-
-        Scene scene = new Scene(layout, 300, 200);
-        reminderStage.setTitle("Напоминания");
-        reminderStage.setScene(scene);
-        reminderStage.initOwner(parentStage);
-        reminderStage.show();
+    public LocalDateTime getDateTime() {
+        return dateTime;
     }
 
-    public static class Reminder {
-        private int id;
-        private String title;
-        private LocalDate date;
+    public void setDateTime(LocalDateTime dateTime) {
+        this.dateTime = dateTime;
+    }
 
-        public Reminder(int id, String title, LocalDate date) {
-            this.id = id;
-            this.title = title;
-            this.date = date;
-        }
-
-        public String getTitle() {
-            return title;
-        }
-
-        public LocalDate getDate() {
-            return date;
-        }
+    @Override
+    public String toString() {
+        return "Напоминание: " + content + " | Время: " + dateTime;
     }
 }
