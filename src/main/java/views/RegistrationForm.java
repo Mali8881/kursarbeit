@@ -25,20 +25,26 @@ public class RegistrationForm extends Application {
         TextField usernameField = new TextField();
         Label passwordLabel = new Label("Пароль:");
         PasswordField passwordField = new PasswordField();
+        Label emailLabel = new Label("Электронная почта:");  // Добавляем поле для email
+        TextField emailField = new TextField();
         Button registerButton = new Button("Зарегистрироваться");
 
+        // Добавляем элементы в сетку
         grid.add(usernameLabel, 0, 0);
         grid.add(usernameField, 1, 0);
         grid.add(passwordLabel, 0, 1);
         grid.add(passwordField, 1, 1);
-        grid.add(registerButton, 1, 2);
+        grid.add(emailLabel, 0, 2);  // Добавляем метку email
+        grid.add(emailField, 1, 2);  // Добавляем поле для ввода email
+        grid.add(registerButton, 1, 3);
 
         // Обработка нажатия кнопки
         registerButton.setOnAction(e -> {
             String username = usernameField.getText();
             String password = passwordField.getText();
+            String email = emailField.getText();  // Получаем значение email
 
-            if (authController.register(username, password)) {
+            if (authController.register(username, password, email)) {  // Передаем email в метод
                 showAlert("Успех", "Регистрация успешна!");
                 primaryStage.close();
             } else {
@@ -46,7 +52,7 @@ public class RegistrationForm extends Application {
             }
         });
 
-        Scene scene = new Scene(grid, 300, 200);
+        Scene scene = new Scene(grid, 300, 250);  // Увеличиваем высоту окна для учета нового поля
         primaryStage.setScene(scene);
         primaryStage.show();
     }

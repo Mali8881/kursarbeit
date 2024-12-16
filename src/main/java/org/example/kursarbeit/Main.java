@@ -1,16 +1,21 @@
 package org.example.kursarbeit;
 
+import javafx.fxml.FXMLLoader; // Для работы с FXML
+import javafx.scene.Parent;    // Для родительского компонента в FXML
+import java.io.IOException;    // Для обработки исключений ввода/вывода
+import org.example.kursarbeit.controllers.ProfileController;
+
 import javafx.application.Application;
-import javafx.fxml.FXMLLoader;
-import javafx.scene.Parent;
+import javafx.geometry.Insets;
 import javafx.scene.Scene;
-import javafx.scene.layout.VBox;
-import javafx.scene.control.Button;
-import javafx.scene.text.Text;
+import javafx.scene.control.*;
+import javafx.scene.layout.*;
 import javafx.scene.text.Font;
+import javafx.scene.text.Text;  // Используем javafx.scene.text.Text для работы с текстом в JavaFX
 import javafx.scene.paint.Color;
-import javafx.geometry.Pos;
 import javafx.stage.Stage;
+import database.Database;
+import org.example.kursarbeit.controllers.RemindersController;
 import org.example.kursarbeit.controllers.TasksController;
 
 public class Main extends Application {
@@ -21,6 +26,111 @@ public class Main extends Application {
         launch(args);
     }
 
+    @Override
+    public void start(Stage primaryStage) {
+        primaryStage.setTitle("Персональный менеджер");
+
+        // Главное окно с выбором действия: Войти или Зарегистрироваться
+        VBox startLayout = new VBox(15);
+        startLayout.setPadding(new Insets(20));
+
+        Button loginButton = new Button("Войти");
+        Button registerButton = new Button("Зарегистрироваться");
+
+        startLayout.getChildren().addAll(loginButton, registerButton);
+
+        loginButton.setOnAction(e -> openLoginForm(primaryStage));
+        registerButton.setOnAction(e -> openRegisterForm(primaryStage));
+
+        Scene startScene = new Scene(startLayout, 300, 250);
+        primaryStage.setScene(startScene);
+        primaryStage.show();
+    }
+
+    // Открытие формы входа
+    private void openLoginForm(Stage primaryStage) {
+        VBox loginLayout = new VBox(15);
+        loginLayout.setPadding(new Insets(10));
+        TextField usernameField = new TextField();
+        PasswordField passwordField = new PasswordField();
+        Button loginButton = new Button("Войти");
+
+        loginLayout.getChildren().addAll(
+                new Label("Имя пользователя:"), usernameField,
+                new Label("Пароль:"), passwordField,
+                loginButton
+        );
+
+        loginButton.setOnAction(e -> {
+            String username = usernameField.getText();
+            String password = passwordField.getText();
+
+            // Проверка авторизации
+            if (Database.authenticateUser(username, password)) {
+                primaryStage.close();  // Закрытие окна авторизации
+                openMainApp(primaryStage);  // Открытие главного окна
+            } else {
+                showAlert("Ошибка", "Неверное имя пользователя или пароль.");
+            }
+        });
+
+        Scene loginScene = new Scene(loginLayout, 300, 250);
+        primaryStage.setScene(loginScene);
+        primaryStage.show();
+    }
+
+    // Открытие формы регистрации
+    private void openRegisterForm(Stage primaryStage) {
+        VBox registerLayout = new VBox(15);
+        registerLayout.setPadding(new Insets(10));
+        TextField usernameField = new TextField();
+        PasswordField passwordField = new PasswordField();
+        TextField emailField = new TextField();
+        Button registerButton = new Button("Зарегистрироваться");
+
+        registerLayout.getChildren().addAll(
+                new Label("Имя пользователя:"), usernameField,
+                new Label("Пароль:"), passwordField,
+                new Label("Email:"), emailField,
+                registerButton
+        );
+
+        registerButton.setOnAction(e -> {
+            String username = usernameField.getText();
+            String password = passwordField.getText();
+            String email = emailField.getText();
+
+            // Проверка на пустые поля
+            if (username.isEmpty() || password.isEmpty() || email.isEmpty()) {
+                showAlert("Ошибка", "Пожалуйста, заполните все поля.");
+                return;
+            }
+
+            // Регистрация пользователя
+            boolean success = Database.registerUser(username, password, email);
+            if (success) {
+                showAlert("Успех", "Регистрация прошла успешно!");
+                primaryStage.close();  // Закрытие окна регистрации
+                openMainApp(primaryStage);  // Открытие главного окна
+            } else {
+                showAlert("Ошибка", "Ошибка при регистрации.");
+            }
+        });
+
+        Scene registerScene = new Scene(registerLayout, 300, 250);
+        primaryStage.setScene(registerScene);
+        primaryStage.show();
+    }
+
+    // Открытие главного окна приложения
+    private void openMainApp(Stage primaryStage) {
+        VBox mainLayout = createMainLayout(primaryStage);
+        Scene mainScene = new Scene(mainLayout, 500, 500);
+        primaryStage.setScene(mainScene);
+        primaryStage.setTitle("Персональный менеджер");
+        primaryStage.show();
+    }
+
     private VBox createMainLayout(Stage primaryStage) {
         // Создание текста для статистики
         Text statisticsText = createStatisticsText();
@@ -29,7 +139,7 @@ public class Main extends Application {
         Button tasksButton = createNavigationButton("Задачи", "#4CAF50", e -> openTasksSection(primaryStage));
         Button contactsButton = createNavigationButton("Контакты", "#2196F3", e -> openContactsSection());
         Button notesButton = createNavigationButton("Заметки", "#FF5722", e -> openNotesSection());
-        Button remindersButton = createNavigationButton("Напоминания", "#FFC107", e -> openRemindersSection(primaryStage)); // кнопка для напоминаний
+        Button remindersButton = createNavigationButton("Напоминания", "#FFC107", e -> openRemindersSection(primaryStage));
         Button profileButton = createNavigationButton("Профиль", "#795548", e -> openProfilePage());
 
         // Расположение элементов в интерфейсе
@@ -39,24 +149,10 @@ public class Main extends Application {
         return layout;
     }
 
-    @Override
-    public void start(Stage primaryStage) throws Exception {
-        // Загрузка главной страницы
-        VBox mainLayout = createMainLayout(primaryStage);
-        Scene mainScene = new Scene(mainLayout, 500, 500);
-        primaryStage.setTitle("Персональный менеджер");
-        primaryStage.setScene(mainScene);
-        primaryStage.show();
-    }
-
     private Text createStatisticsText() {
-        Text statisticsText = new Text("Статистика:");
-        statisticsText.setFont(Font.font("Arial", 16));
-        statisticsText.setFill(Color.DARKBLUE);
-        statisticsText.setText(statisticsText.getText() +
-                "\nЗадач: " + 0 +  // Это временно
-                "\nЗаметок: " + 0 +
-                "\nНапоминаний: " + 0);
+        Text statisticsText = new Text("Статистика:\nЗадач: 0\nЗаметок: 0\nНапоминаний: 0");
+        statisticsText.setFont(Font.font("Arial", 16));  // Установка шрифта
+        statisticsText.setFill(Color.DARKBLUE);  // Установка цвета
         return statisticsText;
     }
 
@@ -68,80 +164,75 @@ public class Main extends Application {
         return button;
     }
 
-    // Открытие раздела задач
-    private void openTasksSection(Stage primaryStage) {
-        System.out.println("Открыт раздел задач");
+    public void openTasksSection(Stage primaryStage) {
         try {
-            // Загрузка FXML файла для задач
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/tasks.fxml"));
-            Parent root = loader.load();
-            tasksController = loader.getController();
 
-            // Открытие новой сцены с задачами
-            Scene tasksScene = new Scene(root);
-            primaryStage.setScene(tasksScene);
-        } catch (Exception e) {
+            Parent root = loader.load();
+            TasksController controller = loader.getController();
+
+            Scene scene = new Scene(root);
+            Stage tasksStage = new Stage();
+            tasksStage.setScene(scene);
+            tasksStage.setTitle("Задачи");
+            tasksStage.show();
+        } catch (IOException e) {
             e.printStackTrace();
         }
     }
+
+
+
 
     private void openNotesSection() {
         System.out.println("Открыть раздел заметок");
-        try {
-            // Загрузка FXML файла для заметок
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/notes.fxml"));
-            Parent root = loader.load();
-
-            // Открытие новой сцены с заметками
-            Stage stage = new Stage();
-            Scene notesScene = new Scene(root);
-            stage.setScene(notesScene);
-            stage.setTitle("Заметки");
-            stage.show();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+        // Логика для открытия заметок
     }
 
-    private void openRemindersSection(Stage primaryStage) {
-        System.out.println("Открыть раздел напоминаний");
+    public void openRemindersSection(Stage primaryStage) {
         try {
-            // Загрузка FXML файла для напоминаний
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/reminders.fxml"));
-            Parent root = loader.load();
 
-            // Открытие новой сцены с напоминаниями
-            Stage stage = new Stage();
-            Scene remindersScene = new Scene(root);
-            stage.setScene(remindersScene);
-            stage.setTitle("Напоминания");
-            stage.show();
-        } catch (Exception e) {
+            Parent root = loader.load();
+            RemindersController controller = loader.getController();
+
+            Scene scene = new Scene(root);
+            Stage remindersStage = new Stage();
+            remindersStage.setScene(scene);
+            remindersStage.setTitle("Напоминания");
+            remindersStage.show();
+        } catch (IOException e) {
             e.printStackTrace();
         }
     }
 
-    // Заглушки для других разделов
+
+
     private void openContactsSection() {
         System.out.println("Открыть раздел контактов");
+        // Логика для открытия контактов
     }
 
     private void openProfilePage() {
-        System.out.println("Открыть профиль");
         try {
-            // Загрузка FXML файла для профиля
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/profile.fxml"));
             Parent root = loader.load();
-
-            // Создание нового окна
             Stage profileStage = new Stage();
-            Scene profileScene = new Scene(root);
-            profileStage.setScene(profileScene);
+            profileStage.setScene(new Scene(root));
             profileStage.setTitle("Профиль");
             profileStage.show();
-        } catch (Exception e) {
+        } catch (IOException e) {
             e.printStackTrace();
         }
     }
 
+
+    private void showAlert(String title, String message) {
+        Alert alert = new Alert(Alert.AlertType.INFORMATION);
+        alert.setTitle(title);
+        alert.setHeaderText(null);
+        alert.setContentText(message);
+        alert.showAndWait();
+    }
 }
+

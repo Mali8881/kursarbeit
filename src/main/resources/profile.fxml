@@ -3,12 +3,50 @@
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.control.Button?>
+<?import javafx.scene.control.CheckBox?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.control.ComboBox?>
 
+<?import javafx.collections.FXCollections?>
+<?import java.lang.String?>
 <VBox xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.example.kursarbeit.controllers.ProfileController">
     <Label text="Профиль" style="-fx-font-size: 20; -fx-font-weight: bold;"/>
+
+    <!-- Имя пользователя -->
     <Label text="Имя:"/>
     <TextField fx:id="nameField" text="Введите ваше имя" />
+
+    <!-- Электронная почта -->
     <Label text="Электронная почта:"/>
     <TextField fx:id="emailField" text="Введите ваш email" />
+
+    <!-- Изменение пароля -->
+    <Label text="Новый пароль:"/>
+    <TextField fx:id="passwordField" promptText="Введите новый пароль" />
+
+    <!-- Загрузка изображения профиля -->
+    <Label text="Изображение профиля:"/>
+    <Button text="Загрузить изображение" onAction="#uploadImage"/>
+    <ImageView fx:id="profileImageView" fitHeight="100" fitWidth="100"/>
+
+    <!-- Настройки интерфейса -->
+    <Label text="Тема интерфейса:"/>
+    <CheckBox fx:id="themeCheckBox" text="Темная тема" />
+
+    <Label text="Язык интерфейса:"/>
+    <ComboBox fx:id="languageComboBox">
+        <items>
+            <FXCollections fx:factory="observableArrayList">
+                <String fx:value="Русский"/>
+                <String fx:value="English"/>
+            </FXCollections>
+        </items>
+    </ComboBox>
+
+    <Label text="Настройки уведомлений:"/>
+    <CheckBox fx:id="notificationsCheckBox" text="Включить уведомления" />
+
+    <!-- Кнопка для сохранения -->
     <Button text="Сохранить" onAction="#saveProfile" />
 </VBox>

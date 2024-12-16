@@ -1,53 +1,33 @@
 package views;
 
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
+
 import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.List;
 
 public class TaskManager {
-    private List<TaskItem> tasks;
+    private ObservableList<Task> tasks;
 
     public TaskManager() {
-        tasks = new ArrayList<>();
+        tasks = FXCollections.observableArrayList();
     }
 
-    public void addTask(TaskItem task) {
+    public void addTask(Task task) {
         tasks.add(task);
     }
 
-    public List<TaskItem> getTasks() {
+    public ObservableList<Task> getTasks() {
         return tasks;
     }
 
-    public static class TaskItem {
-        private int id;
-        private String title;
-        private String description;
-        private LocalDate dueDate;
-        private String status;
+    public void removeTask(Task task) {
+        tasks.remove(task);
+    }
 
-        public TaskItem(int id, String title, String description, LocalDate dueDate, String status) {
-            this.id = id;
-            this.title = title;
-            this.description = description;
-            this.dueDate = dueDate;
-            this.status = status;
-        }
-
-        public String getTitle() {
-            return title;
-        }
-
-        public String getDescription() {
-            return description;
-        }
-
-        public LocalDate getDueDate() {
-            return dueDate;
-        }
-
-        public String getStatus() {
-            return status;
-        }
+    public void updateTask(Task task, String title, String description, LocalDate dueDate, String priority) {
+        task.titleProperty().set(title);
+        task.descriptionProperty().set(description);
+        task.dueDateProperty().set(dueDate);
+        task.priorityProperty().set(priority);
     }
 }

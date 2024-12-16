@@ -38,6 +38,12 @@ public class LoginForm extends Application {
             String username = usernameField.getText();
             String password = passwordField.getText();
 
+            // Проверка на пустые поля
+            if (username.isEmpty() || password.isEmpty()) {
+                showAlert("Ошибка", "Пожалуйста, заполните все поля.");
+                return;
+            }
+
             // Проверяем данные в базе
             if (authenticateUser(username, password)) {
                 showAlert("Успех", "Авторизация успешна!");
