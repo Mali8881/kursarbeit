@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<BorderPane xmlns:fx="http://javafx.com/fxml" fx:controller="controllers.CalendarPageController">
+    <top>
+        <Label text="Календарь" style="-fx-font-size: 20px; -fx-padding: 10; -fx-alignment: center;" alignment="CENTER"/>
+    </top>
+    <center>
+        <VBox spacing="10" alignment="CENTER">
+            <DatePicker fx:id="calendarDatePicker"/>
+            <ListView fx:id="eventsListView" prefHeight="200" prefWidth="300"/>
+        </VBox>
+    </center>
+    <bottom>
+        <HBox spacing="10" alignment="CENTER" style="-fx-padding: 10;">
+            <Button text="Добавить событие" onAction="#addEvent"/>
+            <Button text="Удалить событие" onAction="#deleteEvent"/>
+        </HBox>
+    </bottom>
+</BorderPane>

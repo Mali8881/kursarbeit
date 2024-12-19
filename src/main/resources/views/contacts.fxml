@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<VBox xmlns:fx="http://javafx.com/fxml" fx:controller="controllers.ContactsController">
+    <TextField fx:id="searchField" promptText="Поиск..." />
+    <TableView fx:id="contactsTable">
+        <columns>
+            <TableColumn fx:id="idColumn" text="ID"/>
+            <TableColumn text="Имя" fx:id="nameColumn" />
+            <TableColumn text="Email" fx:id="emailColumn" />
+            <TableColumn text="Телефон" fx:id="phoneColumn" />
+        </columns>
+    </TableView>
+    <HBox>
+        <Button text="Добавить в друзья" onAction="#sendFriendRequest" />
+        <Button text="Поделиться задачей" onAction="#shareTask" />
+        <Button text="Сохранить " onAction="saveFriendRequest" />
+    </HBox>
+</VBox>

@@ -6,7 +6,7 @@
 <?import javafx.scene.text.Text?>
 <?import javafx.geometry.Insets?>
 
-<GridPane xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.example.kursarbeit.controllers.CalendarController"
+<GridPane xmlns:fx="http://javafx.com/fxml/1" fx:controller="controllers.CalendarController"
           hgap="10" vgap="10" style="-fx-padding: 20;">
     <Text text="Календарь" GridPane.columnIndex="0" GridPane.rowIndex="0" style="-fx-font-size: 20px; -fx-font-weight: bold;"/>
     <HBox spacing="10" GridPane.columnIndex="0" GridPane.rowIndex="1">
