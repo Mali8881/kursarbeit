@@ -7,7 +7,6 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 
-
 import java.util.List;
 
 public class ContactsController {
@@ -22,9 +21,9 @@ public class ContactsController {
     @FXML
     public void initialize() {
         // Настройка колонок таблицы
-        nameColumn.setCellValueFactory(cell -> new SimpleStringProperty(cell.getValue().getName()));
-        emailColumn.setCellValueFactory(cell -> new SimpleStringProperty(cell.getValue().getEmail()));
-        phoneColumn.setCellValueFactory(cell -> new SimpleStringProperty(cell.getValue().getPhone()));
+        nameColumn.setCellValueFactory(cell -> cell.getValue().nameProperty());
+        emailColumn.setCellValueFactory(cell -> cell.getValue().emailProperty());
+        phoneColumn.setCellValueFactory(cell -> cell.getValue().phoneProperty());
 
         loadContacts();
     }
@@ -38,9 +37,9 @@ public class ContactsController {
     private void sendFriendRequest() {
         User selectedUser = contactsTable.getSelectionModel().getSelectedItem();
         if (selectedUser != null) {
-            boolean success = FriendRequestDAO.sendFriendRequest(1, selectedUser.getEmail());
+            boolean success = FriendRequestDAO.sendFriendRequest(1, selectedUser.emailProperty().get());
             if (success) {
-                showAlert("Успех", "Запрос отправлен пользователю: " + selectedUser.getEmail());
+                showAlert("Успех", "Запрос отправлен пользователю: " + selectedUser.emailProperty().get());
             } else {
                 showAlert("Ошибка", "Не удалось отправить запрос.");
             }
@@ -58,5 +57,6 @@ public class ContactsController {
     }
 
     public void shareTask(ActionEvent actionEvent) {
+        // Реализация метода для совместного использования задачи (заглушка)
     }
 }

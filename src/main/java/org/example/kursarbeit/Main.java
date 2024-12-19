@@ -1,20 +1,29 @@
 package org.example.kursarbeit;
+
 import javafx.animation.KeyFrame;
 import javafx.animation.KeyValue;
 import javafx.animation.Timeline;
-import database.Database;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.geometry.Insets;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.Label;
+import javafx.scene.control.*;
 import javafx.scene.layout.*;
 import javafx.stage.Stage;
 import javafx.util.Duration;
 import org.example.kursarbeit.components.BurgerMenu;
+import database.Database;
+
+import java.io.IOException;
 
 public class Main extends Application {
+
+    private static final String MAIN_FXML = "/views/main_schedule.fxml";
+
+    public static void main(String[] args) {
+        launch(args);
+    }
 
     @Override
     public void start(Stage primaryStage) {
@@ -49,30 +58,8 @@ public class Main extends Application {
         primaryStage.setTitle("Task-Kage");
         primaryStage.setScene(scene);
         primaryStage.show();
-    }
 
-    public static void main(String[] args) {
-        launch(args);
-      
-import javafx.scene.control.*;
-import javafx.scene.layout.VBox;
-import javafx.stage.Stage;
-
-import java.io.IOException;
-
-public class Main extends Application {
-
-    // Пути к FXML-файлам
-    private static final String MAIN_FXML = "/views/main_schedule.fxml";
-
-    public static void main(String[] args) {
-        launch(args);
-    }
-
-    @Override
-    public void start(Stage primaryStage) {
-        // Запуск с окна входа или регистрации
-        openStartWindow(primaryStage);
+        openStartWindow(primaryStage); // Запуск начального окна
     }
 
     // Начальное окно с кнопками "Войти" и "Зарегистрироваться"
@@ -146,8 +133,6 @@ public class Main extends Application {
         }
     }
 
-
-
     // Главное окно
     private void openMainWindow(Stage primaryStage) {
         try {
@@ -160,17 +145,6 @@ public class Main extends Application {
             e.printStackTrace();
         }
     }
-    private void openCalendarPage(Stage primaryStage) {
-        try {
-            Parent root = FXMLLoader.load(getClass().getResource("/views/calendar_page.fxml"));
-            primaryStage.setTitle("Календарь");
-            primaryStage.setScene(new Scene(root, 400, 300));
-            primaryStage.show();
-        } catch (IOException e) {
-            showAlert(Alert.AlertType.ERROR, "Ошибка", "Не удалось загрузить страницу календаря.");
-            e.printStackTrace();
-        }
-    }
 
     // Метод для показа уведомлений
     private void showAlert(Alert.AlertType type, String title, String message) {
@@ -179,8 +153,5 @@ public class Main extends Application {
         alert.setHeaderText(null);
         alert.setContentText(message);
         alert.showAndWait();
-    }
-
-    public void openContactsView() {
     }
 }
