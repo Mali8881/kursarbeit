@@ -6,4 +6,5 @@ module org.example.kursarbeit {
     exports views;  // Экспортируйте необходимые пакеты
     exports database;
     exports org.example.kursarbeit;
+    exports org.example.kursarbeit.components;
 }

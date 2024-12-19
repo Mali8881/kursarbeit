@@ -1,0 +1,13 @@
+.root {
+    -fx-background-image: url('https://farm9.staticflickr.com/8760/17195790401_ceeeafcddb_o.jpg');
+    -fx-background-size: cover;
+    -fx-background-repeat: no-repeat;
+    -fx-background-position: center;
+}
+
+.animated-text {
+    -fx-font-family: "Verdana";
+    -fx-font-size: 50px;
+    -fx-text-fill: linear-gradient(from 0% 0% to 100% 100%, #326384, #123752);
+    -fx-font-weight: bold;
+}
