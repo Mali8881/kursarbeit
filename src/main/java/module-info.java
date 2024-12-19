@@ -4,6 +4,8 @@ module org.example.kursarbeit {
     requires java.sql;
     requires java.mail;
     exports org.example.kursarbeit;
+    exports org.example.kursarbeit.components;
+
      // Добавьте эту строку для экспорта контроллеров
     // Разрешает доступ к контроллеру через рефлексию
     exports controllers;
@@ -13,6 +15,4 @@ module org.example.kursarbeit {
     opens Manager_models to javafx.fxml;
 
     opens controllers to javafx.fxml;
-
-
 }

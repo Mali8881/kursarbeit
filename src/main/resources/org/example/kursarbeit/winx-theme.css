@@ -1,0 +1,37 @@
+/* Основное меню */
+.burger-menu {
+    -fx-background-color: #2c2f36;
+    -fx-padding: 20px;
+}
+
+.burger-title {
+    -fx-text-fill: #ffeba7;
+    -fx-font-size: 18px;
+    -fx-font-weight: bold;
+}
+
+.burger-button {
+    -fx-text-fill: #ffffff;
+    -fx-background-color: #353746;
+    -fx-border-radius: 5px;
+    -fx-padding: 8px;
+    -fx-font-size: 14px;
+}
+
+.burger-button:hover {
+    -fx-background-color: #ffeba7;
+    -fx-text-fill: #1f2029;
+}
+
+/* Заголовок в центре */
+.heading {
+    -fx-font-size: 24px;
+    -fx-text-fill: #ffeba7;
+    -fx-padding: 10px;
+    -fx-font-weight: bold;
+}
+
+/* Стили для корневого фона */
+.root {
+    -fx-background-color: linear-gradient(to bottom right, #1f2029, #2b2e38);
+}

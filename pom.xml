@@ -9,9 +9,6 @@
     <version>1.0-SNAPSHOT</version>
     <name>kursarbeit</name>
 
-
-
-
     <dependencies>
         <!-- Зависимость для работы с MySQL -->
         <dependency>
@@ -58,6 +55,11 @@
         <dependency>
             <groupId>org.openjfx</groupId>
             <artifactId>javafx-base</artifactId>
+            <version>21</version>
+        </dependency>
+        <dependency>
+            <groupId>org.openjfx</groupId>
+            <artifactId>javafx-web</artifactId> <!-- Добавлено для WebView -->
             <version>21</version>
         </dependency>
 
