@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<VBox xmlns:fx="http://javafx.com/fxml" fx:controller="controllers.ReminderController" spacing="10" style="-fx-padding: 15;">
+    <Label text="Управление напоминаниями" style="-fx-font-size: 18; -fx-font-weight: bold;" />
+    <TableView fx:id="remindersTable" prefHeight="300">
+        <columns>
+            <TableColumn fx:id="idColumn" text="ID" prefWidth="50" />
+            <TableColumn fx:id="titleColumn" text="Заголовок" prefWidth="150" />
+            <TableColumn fx:id="dateColumn" text="Дата" prefWidth="150" />
+            <TableColumn fx:id="timeColumn" text="Время" prefWidth="100" />
+        </columns>
+    </TableView>
+    <HBox spacing="10">
+        <TextField fx:id="titleField" promptText="Заголовок" />
+        <DatePicker fx:id="datePicker" promptText="Выберите дату" />
+        <TextField fx:id="timeField" promptText="Время (чч:мм)" />
+    </HBox>
+    <HBox spacing="10">
+        <Button text="Добавить" onAction="#addReminder" />
+        <Button text="Обновить" onAction="#updateReminder" />
+        <Button text="Удалить" onAction="#deleteReminder" />
+    </HBox>
+</VBox>

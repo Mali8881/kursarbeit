@@ -1,12 +1,12 @@
-package views;
+package Manager_models;
 
+import database.Database;
 import javafx.application.Application;
 import javafx.geometry.Insets;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.layout.GridPane;
 import javafx.stage.Stage;
-import database.Database;
 
 public class LoginForm extends Application {
 
@@ -37,6 +37,12 @@ public class LoginForm extends Application {
         loginButton.setOnAction(e -> {
             String username = usernameField.getText();
             String password = passwordField.getText();
+
+            // Проверка на пустые поля
+            if (username.isEmpty() || password.isEmpty()) {
+                showAlert("Ошибка", "Пожалуйста, заполните все поля.");
+                return;
+            }
 
             // Проверяем данные в базе
             if (authenticateUser(username, password)) {

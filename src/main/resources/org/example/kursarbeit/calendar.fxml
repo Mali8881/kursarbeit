@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.text.Text?>
+<?import javafx.geometry.Insets?>
+
+<GridPane xmlns:fx="http://javafx.com/fxml/1" fx:controller="controllers.CalendarController"
+          hgap="10" vgap="10" style="-fx-padding: 20;">
+    <Text text="Календарь" GridPane.columnIndex="0" GridPane.rowIndex="0" style="-fx-font-size: 20px; -fx-font-weight: bold;"/>
+    <HBox spacing="10" GridPane.columnIndex="0" GridPane.rowIndex="1">
+        <Button text="Предыдущий месяц" onAction="#onPreviousMonth"/>
+        <Button text="Следующий месяц" onAction="#onNextMonth"/>
+    </HBox>
+    <!-- Здесь можно добавить отображение календарных дней -->
+</GridPane>
